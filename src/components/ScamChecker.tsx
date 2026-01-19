@@ -4,6 +4,7 @@ import InputBox from "./InputBox";
 import ResultCard from "./ResultCard";
 import CategoryTag from "./CategoryTag";
 import SuggestionsBox from "./SuggestionsBox";
+import Loader from "./Loader";
 
 export function ScamChecker() {
   const [input, setInput] = useState("");
@@ -14,6 +15,7 @@ export function ScamChecker() {
     if (input.trim().length < 5) return;
 
     setLoading(true);
+    setResult(null);
 
     setTimeout(() => {
       try {
@@ -30,37 +32,29 @@ export function ScamChecker() {
         });
       }
       setLoading(false);
-    }, 300);
+    }, 600);
   };
 
   return (
-    <div className="bg-white shadow-xl rounded-xl p-6 space-y-6">
-      <h1 className="text-3xl font-bold text-center text-primary">
-        Scam Checker Pro
-      </h1>
-
-      <p classname="text-gray-600 text-center">
-        Paste any email, message, link, or job offer. Get instant risk analysis.
-      </p>
-
+    <div className="bg-white shadow-xl rounded-xl p-6 space-y-6 fade-in">
+      
       <InputBox value={input} setValue={setInput} onAnalyze={runAnalysis} />
 
-      {loading && (
-        <div className="text-center text-primary font-medium animate-pulse">
-          Analyzing…
-        </div>
-      )}
+      {loading && <Loader />}
 
       {result && !loading && (
-        <div className="space-y-4">
+        <div className="space-y-4 fade-in">
           <ResultCard score={result.score} />
-          <div className="flex justify-center">
+
+          <div className="flex justify-center fade-in">
             <CategoryTag category={result.category} />
           </div>
+
           <SuggestionsBox suggestions={result.suggestions} />
 
-          <div className="bg-gray-100 rounded-lg p-4">
+          <div className="bg-gray-100 rounded-lg p-4 fade-in">
             <h3 className="font-semibold text-gray-800 mb-2">Red Flags</h3>
+
             {result.redFlags.length === 0 ? (
               <p className="text-green-600 text-sm">No red flags detected.</p>
             ) : (
@@ -77,7 +71,7 @@ export function ScamChecker() {
             )}
           </div>
 
-          <div className="bg-gray-100 rounded-lg p-4">
+          <div className="bg-gray-100 rounded-lg p-4 fade-in">
             <h3 className="font-semibold text-gray-800 mb-2">Green Flags</h3>
             {result.greenFlags.length === 0 ? (
               <p className="text-gray-600 text-sm">No green flags.</p>
